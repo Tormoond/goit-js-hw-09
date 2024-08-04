@@ -1,99 +1,117 @@
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from  "simplelightbox" ;
+import  "simplelightbox/dist/simple-lightbox.min.css" ;
 
 
-
-
-// Додавання зображень до галереї
 const images = [
   {
     preview:
       'https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820__480.jpg',
     original:
       'https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820_1280.jpg',
-    description: 'Hokkaido Flower',
+    description: 'Hokkaido Flower'
   },
   {
     preview:
       'https://cdn.pixabay.com/photo/2019/05/14/22/05/container-4203677__340.jpg',
     original:
       'https://cdn.pixabay.com/photo/2019/05/14/22/05/container-4203677_1280.jpg',
-    description: 'Container Haulage Freight',
+    description: 'Container Haulage Freight'
   },
   {
     preview:
       'https://cdn.pixabay.com/photo/2019/05/16/09/47/beach-4206785__340.jpg',
     original:
       'https://cdn.pixabay.com/photo/2019/05/16/09/47/beach-4206785_1280.jpg',
-    description: 'Aerial Beach View',
+    description: 'Aerial Beach View'
   },
   {
     preview:
       'https://cdn.pixabay.com/photo/2016/11/18/16/19/flowers-1835619__340.jpg',
     original:
       'https://cdn.pixabay.com/photo/2016/11/18/16/19/flowers-1835619_1280.jpg',
-    description: 'Flower Blooms',
+    description: 'Flower Blooms'
   },
   {
     preview:
       'https://cdn.pixabay.com/photo/2018/09/13/10/36/mountains-3674334__340.jpg',
     original:
       'https://cdn.pixabay.com/photo/2018/09/13/10/36/mountains-3674334_1280.jpg',
-    description: 'Alpine Mountains',
+    description: 'Alpine Mountains'
   },
   {
     preview:
       'https://cdn.pixabay.com/photo/2019/05/16/23/04/landscape-4208571__340.jpg',
     original:
       'https://cdn.pixabay.com/photo/2019/05/16/23/04/landscape-4208571_1280.jpg',
-    description: 'Mountain Lake Sailing',
+    description: 'Mountain Lake Sailing'
   },
   {
     preview:
       'https://cdn.pixabay.com/photo/2019/05/17/09/27/the-alps-4209272__340.jpg',
     original:
       'https://cdn.pixabay.com/photo/2019/05/17/09/27/the-alps-4209272_1280.jpg',
-    description: 'Alpine Spring Meadows',
+    description: 'Alpine Spring Meadows'
   },
   {
     preview:
       'https://cdn.pixabay.com/photo/2019/05/16/21/10/landscape-4208255__340.jpg',
     original:
       'https://cdn.pixabay.com/photo/2019/05/16/21/10/landscape-4208255_1280.jpg',
-    description: 'Nature Landscape',
+    description: 'Nature Landscape'
   },
   {
     preview:
       'https://cdn.pixabay.com/photo/2019/05/17/04/35/lighthouse-4208843__340.jpg',
     original:
       'https://cdn.pixabay.com/photo/2019/05/17/04/35/lighthouse-4208843_1280.jpg',
-    description: 'Lighthouse Coast Sea',
-  },
-];
-const ulEl = document.querySelector('.gallery');
+    description: 'Lighthouse Coast Sea'
+  }
+]
 
-function imageTemplate({ preview, original, description } = images) {
-  return `<li class="gallery-item">
-  <a class="gallery-link" href="${original}">
-    <img
-      class="gallery-image"
-      src = "${preview}"
-      alt="${description}"
-    />
-  </a>
-</li>`;
+const ulElement = document.querySelector('ul');
+
+
+for (let i = 0; i < images.length; i++) {
+    const galleryItem = document.createElement('li');
+    galleryItem.classList.add('gallery-item');
+
+    const galleryLink = document.createElement('a');
+    galleryLink.classList.add('gallery-link');
+    galleryLink.href = images[i].original;
+    galleryLink.dataset.source = images[i].original;
+    
+ 
+
+    const galleryImage = document.createElement('img');
+    galleryImage.classList.add('gallery-image');
+    galleryImage.src = images[i].preview;
+    galleryImage.alt = images[i].description;
+
+  
+    galleryLink.appendChild(galleryImage);
+    galleryItem.appendChild(galleryLink);
+
+    ulElement.appendChild(galleryItem);
 }
 
-function imagesTemplate(arr) {
-  return arr.map(imageTemplate).join('');
-}
+ulElement.style.listStyle = 'none';
+ulElement.style.padding = '0';
+ulElement.style.margin = '0';
+ulElement.style.display = 'flex';
+ulElement.style.flexWrap = 'wrap';
+ulElement.style.justifyContent = 'space-between';
 
-const markup = imagesTemplate(images);
-ulEl.innerHTML = markup;
+const liElements = document.querySelectorAll('li');
+liElements.forEach(li => {
+  
+    li.style.width = 'calc((100% - 24px*2) /3)';
 
+    const galleryLink = li.querySelector('.gallery-link');
+    galleryLink.style.display = 'block';
+    galleryLink.style.width = '100%';
+    const galleryImage = li.querySelector('.gallery-image');
+    galleryImage.style.width = '100%';
+    galleryImage.style.height = '100%';
+});
 
-
-    let gallery = new SimpleLightbox('.gallery-link', {
-        captionsData: 'alt',
-        captionDelay: 250,
-    });
+const lightbox = new SimpleLightbox('.gallery-link', { captionsData: 'alt', captionDelay: 250 });
