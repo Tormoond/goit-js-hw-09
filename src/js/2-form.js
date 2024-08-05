@@ -1,45 +1,36 @@
-const formData = { email: '', message: '' };
+
+const formData = {
+    email: "",
+    message: "",
+};
 
 const form = document.querySelector('.feedback-form');
 
-form.addEventListener('input', saveInputDataToLS);
-window.addEventListener('DOMContentLoaded', onReloadGetLSData);
-form.addEventListener('submit', validateOnSubmitBtn);
+window.addEventListener('DOMContentLoaded', () => {
+    const savedFormData = JSON.parse(localStorage.getItem('feedback-form-state'));
+    if (savedFormData) {
+        form.email.value = savedFormData.email;
+        form.message.value = savedFormData.message;
+    }
+});
 
-function saveInputDataToLS() {
-  formData.email = form.elements.email.value.trim();
-  formData.message = form.elements.message.value.trim();
-  const jsonFormData = JSON.stringify(formData);
-  localStorage.setItem('feedback-form-state', jsonFormData);
-}
+form.addEventListener('input', e => {
+    const { name, value } = e.target;
+    if (formData.hasOwnProperty(name)) {
+        formData[name] = value.trim();
+        localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+    }
+});
 
-function onReloadGetLSData() {
-  const jsonDataFromLS = localStorage.getItem('feedback-form-state');
-  if (!jsonDataFromLS) {
-    return;
-  }
-  try {
-    const dataFromLS = JSON.parse(jsonDataFromLS);
-    const { email, message } = dataFromLS;
-    form.elements.email.value = email;
-    form.elements.message.value = message;
-    formData.email = email;
-    formData.message = message;
-  } catch (error) {
-    console.error('Error parsing JSON from localStorage:', error);
-  }
-}
+form.addEventListener('submit', e => {
+    e.preventDefault();
 
-function validateOnSubmitBtn(event) {
-  event.preventDefault();
-
-  if (formData.email === '' || formData.message === '') {
-    alert('Fill please all fields');
-  } else {
-    console.log(formData);
-    localStorage.removeItem('feedback-form-state');
-    form.reset();
-    formData.email = '';
-    formData.message = '';
-  }
-}
+    const savedFormData = JSON.parse(localStorage.getItem('feedback-form-state'));
+    if (savedFormData.email && savedFormData.message) {
+        console.log(savedFormData);
+        localStorage.removeItem('feedback-form-state');
+        form.reset();
+    } else {
+        alert('Fill please all fields');
+    }
+});
